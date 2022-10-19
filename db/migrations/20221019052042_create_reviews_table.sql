@@ -5,7 +5,7 @@ CREATE TABLE reviews (
   ratings FLOAT NULL,
   user_id INT NOT NULL,
   product_id INT NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
 );
