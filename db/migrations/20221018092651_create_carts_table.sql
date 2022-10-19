@@ -1,12 +1,12 @@
 -- migrate:up
 CREATE TABLE carts (
-  id INT NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   count INT NOT NULL,
   user_id INT NOT NULL,
   product_option_id INT NOT NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES users (id),
-  FOREIGN KEY (product_option_id) REFERENCES product_options (id)
+  delete_at TIMESTAMP NULL ON DELETE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (product_option_id) REFERENCES product_options (id) ON DELETE CASCADE
 );
 
 -- migrate:down
