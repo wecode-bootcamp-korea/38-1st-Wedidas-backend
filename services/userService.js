@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userDao = require('../models/userDao');
-const regex = require('../utils/regex');
+const emailRegex = require('../utils/emailRegex');
+const passwordRegex = require('../utils/passwordRegex');
 
 const hashPassword = async (plaintextPassword) => {
   const saltRounds = 10; 
@@ -12,7 +13,8 @@ const hashPassword = async (plaintextPassword) => {
 }
 
 const signUp = async (name, email, password, birthday, phoneNumber) => {
-  regex(email, password);
+  emailRegex(email);
+  passwordRegex(password);
 
   const hashedPassword = await hashPassword(password);
 
@@ -20,7 +22,8 @@ const signUp = async (name, email, password, birthday, phoneNumber) => {
 }
 
 const signIn = async (email, password) => {
-  regex(email, password);
+  emailRegex(email);
+  passwordRegex(password);
 
   const user = await userDao.getUserByEmail(email);
 
