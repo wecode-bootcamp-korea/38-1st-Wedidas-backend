@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userDao = require('../models/userDao');
+const regex = require('../utils/regex');
 
 const hashPassword = async (plaintextPassword) => {
   const saltRounds = 10; 
@@ -11,20 +12,7 @@ const hashPassword = async (plaintextPassword) => {
 }
 
 const signUp = async (name, email, password, birthday, phoneNumber) => {
-  const EMAILREGEX    =/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-  const PASSWORDREGEX =/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
-	
-  if (!EMAILREGEX.test(email)) {
-    const error = new Error('INVALID_EMAIL');
-    error.statusCode = 400;
-    throw error;
-  }
-
-  if (!PASSWORDREGEX.test(password)) {
-    const error = new Error('INVALID_PASSWORD');
-    error.statusCode = 400;
-    throw error;
-  }
+  regex(email, password);
 
   const hashedPassword = await hashPassword(password);
 
@@ -32,20 +20,7 @@ const signUp = async (name, email, password, birthday, phoneNumber) => {
 }
 
 const signIn = async (email, password) => {
-  const EMAILREGEX    =/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/
-  const PASSWORDREGEX =/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
-		
-  if (!EMAILREGEX.test(email)) {
-    const error = new Error('INVALID_EMAIL');
-    error.statusCode = 400;
-    throw error;
-  }
-
-  if (!PASSWORDREGEX.test(password)) {
-    const error = new Error('INVALID_PASSWORD');
-    error.statusCode = 400;
-    throw error;
-  }
+  regex(email, password);
 
   const user = await userDao.getUserByEmail(email);
 
