@@ -1,7 +1,7 @@
 -- migrate:up
 CREATE TABLE carts (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  count INT NOT NULL,
+  count INT NULL,
   user_id INT NOT NULL,
   product_option_id INT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
