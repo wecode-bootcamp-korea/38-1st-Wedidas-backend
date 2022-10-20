@@ -8,7 +8,7 @@ const getUserByEmail = async (email) => {
 			email,
 			password,
 			birthday,
-      phone_number
+			phone_number
 		FROM users
 		WHERE email=?`, [email]
 	);
@@ -23,7 +23,7 @@ const getUserById = async (id) => {
 			name,
 			email,
 			birthday,
-      phone_number
+			phone_number
 		FROM users
 		WHERE id=?`, [id]
 	);
