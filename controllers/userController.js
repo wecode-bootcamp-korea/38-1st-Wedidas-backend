@@ -5,14 +5,12 @@ const signUp = catchAsync(async (req, res) => {
   const { name, email, password, birthday, phoneNumber } = req.body;
 
   if ( !name || !email || !password || !birthday || !phoneNumber ) {
-		const error = new Error('KEY_ERROR');
-		error.statusCode = 400;
-
-		throw error;
-	}
+    const error = new Error('KEY_ERROR');
+    error.statusCode = 400;
+    throw error;
+  }
 
   const insertId = await userService.signUp(name, email, password, birthday, phoneNumber);
-  console.log(insertId);
   res.status(201).json({ insertId });
 });
 
