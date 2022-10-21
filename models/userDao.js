@@ -14,6 +14,23 @@ const createUser = async (name, email, password, birthday, phoneNumber) => {
   return result.insertId;
 }
 
+const getUserByEmail = async (email) => {
+	const result = await appDataSource.query(`
+		SELECT 
+			id,
+			name,
+			email,
+			password,
+			birthday,
+			phone_number
+		FROM users
+		WHERE email=?`, [email]
+	);
+
+	return result[0];
+}
+
 module.exports = {
   createUser,
+	getUserByEmail
 }

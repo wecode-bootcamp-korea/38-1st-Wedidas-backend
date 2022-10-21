@@ -15,7 +15,7 @@ const createWishlist = catchAsync(async (req, res) => {
 });
 
 const getWishlist = catchAsync(async (req, res) => {
-  const userId = req.params.userId;
+  const { userId } = req.query;
 
   if ( !userId ) {
     const error = new Error('KEY_ERROR');
@@ -28,9 +28,7 @@ const getWishlist = catchAsync(async (req, res) => {
 });
 
 const deleteWishlist = catchAsync (async (req, res) => {
-  const userId = req.params.userId;
-  const productId = req.params.productId;
-
+  const { userId, productId } = req.query;
   if ( !userId || !productId) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;

@@ -25,6 +25,7 @@ const getWishlist = async (userId) => {
   `, 
   [userId]
   );
+
   return result;
 }
 
