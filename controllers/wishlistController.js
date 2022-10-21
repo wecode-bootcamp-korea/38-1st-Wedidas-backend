@@ -2,9 +2,9 @@ const wishlistService = require('../services/wishlistService');
 const { catchAsync } = require('../utils/error');
 
 const createWishlist = catchAsync(async (req, res) => {
-  const { userId, productId } = req.body;
-
-  if ( !userId || !productId ) {
+  const userId = req.user.id;
+  const { productId } = req.body;
+  if ( !productId ) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
     throw error;
@@ -15,7 +15,7 @@ const createWishlist = catchAsync(async (req, res) => {
 });
 
 const getWishlist = catchAsync(async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.user.id;
 
   if ( !userId ) {
     const error = new Error('KEY_ERROR');
@@ -28,8 +28,9 @@ const getWishlist = catchAsync(async (req, res) => {
 });
 
 const deleteWishlist = catchAsync (async (req, res) => {
-  const { userId, productId } = req.query;
-  if ( !userId || !productId) {
+  const userId = req.user.id;
+  const { productId } = req.query;
+  if ( !productId ) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
     throw error;
@@ -37,7 +38,6 @@ const deleteWishlist = catchAsync (async (req, res) => {
 
   try {
     await wishlistService.deleteWishlist(userId, productId)
-
     res.status(204).send()
   } catch (error) {
     res.status(error.statusCode).json({ message: error.message });

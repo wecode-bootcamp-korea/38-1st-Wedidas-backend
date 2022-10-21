@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
-const { userService } = require('../services/userService');
+const userService = require('../services/userService');
 
 const loginRequired = async (req, res, next) => {
 
   const accessToken = req.headers.authorization;
-
   if (!accessToken) {
     const error = new Error('NEED_ACCESS_TOKEN');
     error.statusCode = 401;
@@ -14,9 +12,7 @@ const loginRequired = async (req, res, next) => {
   }
 
   const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
-
   const user = await userService.getUserById(decoded.id);
-
   if (!user) {
     const error = new Error('USER_DOES_NOT_EXIST');
     error.statusCode = 404;
