@@ -35,13 +35,13 @@ const deleteWishlist = catchAsync (async (req, res) => {
     throw error;
   }
 
-	try {
-		await wishlistService.deleteWishlist(userId, productId)
+  try {
+    await wishlistService.deleteWishlist(userId, productId)
 
-		res.status(204).send()
-	} catch (error) {
-		res.status(error.statusCode).json({ message: error.message });
-	}
+    res.status(204).send()
+  } catch (error) {
+    res.status(error.statusCode).json({ message: error.message });
+  }
 });
 
 module.exports = {
