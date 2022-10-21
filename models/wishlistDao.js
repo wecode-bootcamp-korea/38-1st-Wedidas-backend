@@ -14,7 +14,8 @@ const createWishlist = async (userId, productId) => {
 
 const getWishlist = async (userId) => {
   const result = await appDataSource.query(`
-  SELECT 
+  SELECT
+    w.user_id AS id,
     p.name,  
     p.price,
     p.thumbnail_image_url
