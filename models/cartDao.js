@@ -32,7 +32,19 @@ const getCart = async (userId) => {
   return result;
 }
 
+const deleteCart = async (userId, productId) => {
+  const result = await appDataSource.query(`
+    DELETE
+    FROM carts
+    WHERE user_id = ? AND product_option_id = ?
+  `,
+  [userId, productId]
+  );
+  return result;
+}
+
 module.exports = {
   createCart,
-  getCart
+  getCart,
+  deleteCart
 }
