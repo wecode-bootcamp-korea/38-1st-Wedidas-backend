@@ -1,19 +1,24 @@
 const database = require("./dataSource");
 
-const getProducts = async (sortPrice, size, offset, limit, gender) => {
+const getProducts = async (sort, size, offset, limit, gender) => {
   try {
-    const numberOffset = +offset;
-    const numberLimit = +limit;
-    let priceSort = '';
+      const numberOffset = +offset; 
+      const numberLimit = +limit;
+    let sortValue = '';
 
-    if(sortPrice === 'high'){
-      priceSort = 'p.price desc'
-    }else if(sortPrice === 'low'){ 
-      priceSort = 'p.price'
-    }else if(sortPrice === undefined){
-      priceSort = 'p.id'
-    }    
-
+    if(sort === 'high'){
+      sortValue = 'p.price desc'
+    }else if(sort === 'low'){ 
+      sortValue = 'p.price'
+    }else if(sort === 'new'){
+      sortValue = 'p.id'
+    }else if(sort === 'old'){
+      sortValue = 'p.id desc'
+    }else if(sort === undefined){
+      sortValue = 'p.id'
+    } 
+    
+    
     return await database.query(`
        SELECT
         DISTINCT
@@ -26,8 +31,8 @@ const getProducts = async (sortPrice, size, offset, limit, gender) => {
        FROM products AS p
        INNER JOIN sub_categories AS sc ON p.sub_category_id = sc.id
        INNER JOIN main_categories AS mc ON sc.main_category_id = mc.id
-       WHERE mc.name = ? 
-       ORDER BY ${priceSort}
+       WHERE mc.name = ?
+       ORDER BY ${sortValue}
        LIMIT ?,?
        `, [gender, numberOffset, numberLimit]
     );

@@ -1,7 +1,7 @@
 const productDao = require('../models/productDao');
 
-const getProducts = async (sortPrice, size, offset, limit, gender) => {
-    return await productDao.getProducts(sortPrice, size, offset, limit, gender);
+const getProducts = async (sort, size, offset, limit, gender) => {
+    return await productDao.getProducts(sort, size, offset, limit, gender);
 };
 
 module.exports = {
