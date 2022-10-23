@@ -9,9 +9,9 @@ const getProducts = async (sort, size, offset, limit, gender) => {
       }else if(sort === 'low'){ 
         sort = 'p.price';
       }else if(sort === 'new'){
-        sort = 'p.id';
-      }else if(sort === 'old'){
         sort = 'p.id desc';
+      }else if(sort === 'old'){
+        sort = 'p.id';
       }else if(sort === undefined){
         sort = 'p.id';
       }
