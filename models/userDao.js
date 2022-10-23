@@ -11,7 +11,7 @@ const createUser = async (name, email, password, birthday, phoneNumber) => {
     ) VALUES (?, ?, ?, ?, ?)`,
     [name, email, password, birthday, phoneNumber]
   );
-  return result.insertId;
+  return result.affectedRows;
 }
 
 const getUserByEmail = async (email) => {

@@ -10,8 +10,8 @@ const createWishlist = catchAsync(async (req, res) => {
     throw error;
   }
 
-  const insertId = await wishlistService.createWishlist(userId, productId);
-  res.status(201).json({ insertId });
+  await wishlistService.createWishlist(userId, productId);
+  res.status(201).json({ message: '위시리스트 저장 성공' });
 });
 
 const getWishlist = catchAsync(async (req, res) => {

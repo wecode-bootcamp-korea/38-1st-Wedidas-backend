@@ -9,7 +9,7 @@ const createWishlist = async (userId, productId) => {
     [userId, productId]
   );
 
-  return result.insertId;
+  return result.affectedRows;
 }
 
 const getWishlist = async (userId) => {
