@@ -27,7 +27,6 @@ const getUserByEmail = async (email) => {
 		FROM users
 		WHERE email=?`, [email]
 	);
-
 	return result[0];
 }
 
