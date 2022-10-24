@@ -12,10 +12,9 @@ const getProducts = async (sort, size, offset, limit, gender) => {
         sort = 'p.id desc';
       }else if(sort === 'old'){
         sort = 'p.id';
-      }else if(sort === undefined){
+      }else if(sort === ''){
         sort = 'p.id';
       }
-      console.log(sort)
 
     return await productDao.getProducts(sort, size, offset, limit, gender);
 };
