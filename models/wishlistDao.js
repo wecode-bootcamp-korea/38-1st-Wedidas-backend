@@ -8,16 +8,15 @@ const createWishlist = async (userId, productId) => {
     ) VALUES (?, ?)`,
     [userId, productId]
   );
-
   return result.affectedRows;
 }
 
 const getWishlist = async (userId) => {
   const result = await appDataSource.query(`
   SELECT
-    w.user_id AS id,
+    w.user_id AS userId,
     p.id AS productId,
-    p.name,  
+    p.name,
     p.price,
     p.thumbnail_image_url AS thumbnailUrl
   FROM wishlists w
@@ -27,7 +26,6 @@ const getWishlist = async (userId) => {
   `, 
   [userId]
   );
-
   return result;
 }
 

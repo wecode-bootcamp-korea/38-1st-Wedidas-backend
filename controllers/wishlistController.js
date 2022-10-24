@@ -11,7 +11,7 @@ const createWishlist = catchAsync(async (req, res) => {
   }
 
   await wishlistService.createWishlist(userId, productId);
-  res.status(201).json({ message: '위시리스트 저장 성공' });
+  res.status(201).json({ message: 'Added to wishlist' });
 });
 
 const getWishlist = catchAsync(async (req, res) => {
