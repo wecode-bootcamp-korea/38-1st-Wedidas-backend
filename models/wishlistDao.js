@@ -19,9 +19,9 @@ const getWishlist = async (userId) => {
     p.name,
     p.price,
     p.thumbnail_image_url AS thumbnailUrl
-  FROM wishlists w
-  JOIN users u ON w.user_id = u.id
-  JOIN products p ON w.product_id = p.id
+  FROM wishlists AS w
+  JOIN users AS u ON w.user_id = u.id
+  JOIN products AS p ON w.product_id = p.id
   WHERE w.user_id = ?
   `, 
   [userId]
