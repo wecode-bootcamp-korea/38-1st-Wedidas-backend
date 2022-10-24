@@ -11,39 +11,41 @@ const createUser = async (name, email, password, birthday, phoneNumber) => {
     ) VALUES (?, ?, ?, ?, ?)`,
     [name, email, password, birthday, phoneNumber]
   );
-  return result.affectedRows;
+  return result.insertId;
 }
 
 const getUserByEmail = async (email) => {
-	const result = await appDataSource.query(`
-		SELECT 
-			id,
-			name,
-			email,
-			password,
+  const result = await appDataSource.query(`
+    SELECT
+      id,
+      name,
+      email,
+      password,
 			birthday,
-			phone_number,
+      phone_number,
 			point
 		FROM users
-		WHERE email=?`, [email]
-	);
-	return result[0];
+		WHERE email=?`,
+    [email]
+  );
+  return result[0];
 }
 
 const getUserById = async (id) => {
-	const result = await appDataSource.query(`
-		SELECT 
+  const result = await appDataSource.query(`
+    SELECT
 			id,
-			name,
-			email,
-			password,
-			birthday,
-			phone_number,
+      name,
+      email,
+      password,
+      birthday,
+      phone_number,
 			point
 		FROM users
-		WHERE id=?`, [id]
+		WHERE id=?`,
+		[id]
 	);
-	return result[0];
+  return result[0];
 }
 
 module.exports = {
