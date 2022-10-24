@@ -13,18 +13,17 @@ const createWishlist = async (userId, productId) => {
 
 const getWishlist = async (userId) => {
   const result = await appDataSource.query(`
-  SELECT
-    w.user_id AS userId,
-    p.id AS productId,
-    p.name,
-    p.price,
-    p.thumbnail_image_url AS thumbnailUrl
-  FROM wishlists AS w
-  JOIN users AS u ON w.user_id = u.id
-  JOIN products AS p ON w.product_id = p.id
-  WHERE w.user_id = ?
-  `, 
-  [userId]
+    SELECT
+      w.user_id AS userId,
+      p.id AS productId,
+      p.name,
+      p.price,
+      p.thumbnail_image_url AS thumbnailUrl
+    FROM wishlists AS w
+    JOIN users AS u ON w.user_id = u.id
+    JOIN products AS p ON w.product_id = p.id
+    WHERE w.user_id = ?`, 
+    [userId]
   );
   return result;
 }

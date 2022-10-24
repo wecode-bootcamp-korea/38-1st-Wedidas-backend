@@ -4,6 +4,7 @@ const { catchAsync } = require('../utils/error');
 const createWishlist = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { productId } = req.body;
+
   if ( !productId ) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
@@ -30,6 +31,7 @@ const getWishlist = catchAsync(async (req, res) => {
 const deleteWishlist = catchAsync (async (req, res) => {
   const userId = req.user.id;
   const { productId } = req.query;
+  
   if ( !productId ) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
