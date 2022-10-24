@@ -2,7 +2,7 @@ const appDataSource = require('./dataSource');
 
 const createWishlist = async (userId, productId) => {
   const result = await appDataSource.query(`
-    INSERT INTO wishlists (
+    INSERT IGNORE INTO wishlists (
       user_id,
       product_id
     ) VALUES (?, ?)`,
