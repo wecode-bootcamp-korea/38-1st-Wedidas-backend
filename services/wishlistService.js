@@ -1,15 +1,7 @@
 const wishlistDao = require('../models/wishlistDao');
 
 const createWishlist = async (userId, productId) => {
-  
-  const affectedRows = await wishlistDao.createWishlist(userId, productId);
-
-  if (!affectedRows) {
-    const error = new Error('This product already exists!');
-    error.statusCode = 400;
-    throw error;
-  }
-  return affectedRows;
+  return await wishlistDao.createWishlist(userId, productId);
 }
 
 const getWishlist = async (userId) => {

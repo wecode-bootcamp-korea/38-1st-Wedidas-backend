@@ -8,7 +8,7 @@ const createWishlist = async (userId, productId) => {
     ) VALUES (?, ?)`,
     [userId, productId]
   );
-  return result.affectedRows;
+  return result;
 }
 
 const getWishlist = async (userId) => {
@@ -22,7 +22,7 @@ const getWishlist = async (userId) => {
   FROM wishlists w
   JOIN users u ON w.user_id = u.id
   JOIN products p ON w.product_id = p.id
-  WHERE u.id = ?
+  WHERE w.user_id = ?
   `, 
   [userId]
   );
