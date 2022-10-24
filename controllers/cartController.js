@@ -2,20 +2,20 @@ const cartService = require('../services/cartService');
 const { catchAsync } = require('../utils/error');
 
 const createCart = catchAsync(async (req, res) => {
-  const userId = req.query.id;
-  const { productOptionId } = req.body;
+  const userId = req.user.id;
+  const { productId, sizeId } = req.body;
 
-  if ( !userId || !productOptionId ) {
+  if ( !userId || !productId || !sizeId ) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
     throw error;
   }
-  const insertCart = await cartService.createCart(userId, productOptionId);
+  const insertCart = await cartService.createCart(userId, productId, sizeId);
   res.status(201).json({ insertId : insertCart.insertId });
 });
 
 const getCart = catchAsync(async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.user.id;
 
   if ( !userId ) {
     const error = new Error('KEY_ERROR');
@@ -28,15 +28,16 @@ const getCart = catchAsync(async (req, res) => {
 })
 
 const deleteCart = catchAsync(async (req, res) => {
-  const { userId, productId } = req.query;
+  const userId = req.user.id;
+  const { productId, sizeId } = req.query;
 
-  if ( !userId || !productId ) {
+  if ( !userId || !productId || !sizeId) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
     throw error;
   }
 
-  await cartService.deleteCart(userId, productId);
+  await cartService.deleteCart(userId, productId, sizeId);
   res.status(204).end();
 })
 
