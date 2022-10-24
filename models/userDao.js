@@ -25,7 +25,7 @@ const getUserByEmail = async (email) => {
       phone_number,
 			point
 		FROM users
-		WHERE email=?`,
+		WHERE email=?`, 
     [email]
   );
   return result[0];
@@ -49,7 +49,7 @@ const getUserById = async (id) => {
 }
 
 module.exports = {
-  createUser,
+	createUser,
 	getUserByEmail,
 	getUserById
 }
