@@ -10,8 +10,8 @@ const createCart = catchAsync(async (req, res) => {
     error.statusCode = 400;
     throw error;
   }
-  const insertCart = await cartService.createCart(userId, productId, sizeId);
-  res.status(201).json({ insertId : insertCart.insertId });
+  await cartService.createCart(userId, productId, sizeId);
+  res.status(201).json({ message: 'SUCCESS' });
 });
 
 const getCart = catchAsync(async (req, res) => {
