@@ -21,11 +21,11 @@ const getUserByEmail = async (email) => {
       name,
       email,
       password,
-			birthday,
+      birthday,
       phone_number,
-			point
-		FROM users
-		WHERE email=?`, 
+      point
+    FROM users
+    WHERE email=?`, 
     [email]
   );
   return result[0];
@@ -40,16 +40,16 @@ const getUserById = async (id) => {
       password,
       birthday,
       phone_number,
-			point
-		FROM users
-		WHERE id=?`,
-		[id]
-	);
+      point
+      FROM users
+    WHERE id=?`,
+    [id]
+  );
   return result[0];
 }
 
 module.exports = {
-	createUser,
-	getUserByEmail,
-	getUserById
+  createUser,
+  getUserByEmail,
+  getUserById
 }
