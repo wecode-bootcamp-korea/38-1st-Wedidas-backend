@@ -11,6 +11,10 @@ const hashPassword = async (plaintextPassword) => {
   return await bcrypt.hash(plaintextPassword, salt);
 }
 
+const getUserById = async (id) => {
+  return await userDao.getUserById(id);
+}
+
 const signUp = async (name, email, password, birthday, phoneNumber) => {
   emailValidator(email);
   passwordValidator(password);
@@ -47,5 +51,6 @@ const signIn = async (email, password) => {
 
 module.exports = {  
   signUp,
-  signIn
+  signIn,
+  getUserById
 }
