@@ -23,7 +23,7 @@ const createCart = async (userId, productId, sizeId) => {
         )  
     )
   `)
-  
+
   if (insertCart.affectedRows === 0) {
     const error = new Error('FAILED');
     error.statusCode = 400;
@@ -32,9 +32,10 @@ const createCart = async (userId, productId, sizeId) => {
   return insertCart;
 }
 
-const getCart = async (userId) => {
+const getCartByUserId = async (userId) => {
   const result = await appDataSource.query(`
     SELECT
+      c.id AS cartId,
       c.user_id AS userId,
       c.product_option_id AS productOptionId,
       c.count,
@@ -71,23 +72,19 @@ const updateCart = async (userId, count, stock) => {
   return result;
 }
 
-const deleteCart = async (userId, productId, sizeId) => {
+const deleteCart = async (userId, cartId) => {
   const result = await appDataSource.query(`
     DELETE
     FROM carts
-    WHERE user_id=? AND 
-      product_option_id = (SELECT po.id FROM product_options AS po
-        JOIN products AS p ON po.product_id = p.id
-        JOIN sizes AS s ON po.size_id = s.id
-        WHERE po.product_id=? AND po.size_id=?)`,
-  [userId, productId, sizeId]
+    WHERE user_id=? AND id=?`,
+  [userId, cartId]
   );
   return result;
 }
 
 module.exports = {
   createCart,
-  getCart,
+  getCartByUserId,
   updateCart,
   deleteCart
 }
