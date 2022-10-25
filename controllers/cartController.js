@@ -23,15 +23,15 @@ const getCartByUserId = catchAsync(async (req, res) => {
 
 const updateCart = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const { count, stock } = req.query;
+  const { cartId, count, stock } = req.query;
 
-  if ( !count || !stock) {
+  if ( !cartId || !count || !stock) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
     throw error;
   }
 
-  await cartService.updateCart(userId, count, stock);
+  await cartService.updateCart(userId, cartId, count, stock);
   res.status(200).json({ message: 'SUCCESS' });
 })
 

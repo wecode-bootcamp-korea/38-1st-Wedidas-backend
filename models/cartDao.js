@@ -1,3 +1,4 @@
+const { UsingJoinColumnOnlyOnOneSideAllowedError } = require('typeorm');
 const appDataSource = require('./dataSource');
 
 const createCart = async (userId, productId, sizeId) => {
@@ -57,11 +58,11 @@ const getCartByUserId = async (userId) => {
   return result;
 }
 
-const updateCart = async (userId, count, stock) => {
+const updateCart = async (userId, cartId, count, stock) => {
   const result = await appDataSource.query(`
     UPDATE carts AS c, product_options AS po
     SET count=${count}
-    WHERE user_id=${userId} AND stock=${stock} AND ${count} <= ${stock}
+    WHERE c.id=${cartId} AND c.user_id=${userId} AND po.stock=${stock} AND ${count} <= ${stock}
   `);
   
   if (result.affectedRows === 0) {
