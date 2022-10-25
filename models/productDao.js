@@ -1,13 +1,5 @@
 const database = require("./dataSource");
 
-const imageUrl = async (productId) => {
-  return await database.query(`
-    SELECT 
-      pi.image_url AS image_url 
-    FROM product_images AS pi
-  `)
-}
-
 const getProducts = async (offset, limit, gender) => {
   try {
     const numberOffset = +offset;
@@ -32,24 +24,41 @@ const getProducts = async (offset, limit, gender) => {
   }
 };
 
-
-const productDetails = async (gender, category, productId) => {
+const productDetails = async (productId) => {
    try{
     return await database.query(`
-      SELECT DISTINCT
+        SELECT DISTINCT
+        p.id,
         p.name AS name,
         p.description AS description,
-        pi.image_url AS image,
+        p.thumbnail_image_url AS thumbnail,
+        si.stocksize AS stocksize,
+        sc.name AS category,
         mc.name AS gender,
-        sc.name AS category
-      FROM products AS p 
-      INNER JOIN product_options AS po ON p.id = po.product_id
-      INNER JOIN product_images AS pi ON p.id = pi.product_id
-      INNER JOIN sub_categories AS sc ON p.sub_category_id = sc.id
-      INNER JOIN main_categories AS mc ON sc.main_category_id = mc.id
-      WHERE mc.name = ? AND sc.name = ? AND p.id = ?
-    ` , [gender, category, productId])
-   }
+        JSON_ARRAY(pi.image_url) AS imageUrl
+      FROM products AS p
+      LEFT JOIN product_options AS po ON p.id = po.product_id
+      LEFT JOIN product_images AS pi ON pi.product_id = p.id
+      LEFT JOIN sub_categories AS sc ON sc.id = p.sub_category_id
+      LEFT JOIN main_categories AS mc ON mc.id = sc.main_category_id 
+      LEFT JOIN (       
+        SELECT          
+        po.id,           
+        JSON_ARRAYAGG(             
+          JSON_OBJECT(  
+            "sizeId", size_id,                            
+            "size", foot_size,
+            "stock", po.stock
+            )           
+            ) AS stocksize        
+            FROM sizes
+            INNER JOIN product_options AS po ON po.size_id=sizes.id
+            GROUP BY po.id     
+        ) AS si ON po.size_id = si.id
+        WHERE p.id=?
+    ` , [productId]);
+   }  
+
    catch (err) {
     const error = new Error(err.message);
     error.statusCode = 500;
@@ -59,6 +68,5 @@ const productDetails = async (gender, category, productId) => {
 
 module.exports = {
   getProducts,
-  productDetails,
-  imageUrl
+  productDetails
 };
