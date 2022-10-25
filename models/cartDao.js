@@ -1,45 +1,36 @@
 const appDataSource = require('./dataSource');
 
 const createCart = async (userId, productId, sizeId) => {
-  const selectCart = await appDataSource.query(`
-    SELECT
-      c.count,
-      c.user_id,
-      po.stock,
-      po.id
-    FROM carts AS c
-    JOIN users AS u ON c.user_id = u.id
-    JOIN product_options AS po ON c.product_option_id = po.id
-    JOIN products AS p ON po.product_id = p.id
-    JOIN sizes AS s ON po.size_id = s.id
-    WHERE c.user_id=? AND po.product_id=? AND po.size_id=?`,
-    [userId, productId, sizeId]
-  );
-  if (selectCart[0].count < 1) {
-    const insertCart = await appDataSource.query(`
-    INSERT INTO carts (
+  const insertCart = await appDataSource.query(`
+    INSERT INTO carts 
+    (
       user_id,
       product_option_id
-    ) VALUES (?, (SELECT po.id FROM product_options AS po
-      JOIN products AS p ON po.product_id = p.id
-      JOIN sizes AS s ON po.size_id = s.id
-      WHERE po.product_id=? AND po.size_id=?))`, 
-    [userId, productId, sizeId]
-  );
-  return insertCart;
-  } else if (selectCart[0].count < selectCart[0].stock) {
-    const updateCart = await appDataSource.query(`
-      UPDATE carts SET count=${selectCart[0].count}+1 WHERE user_id=? AND ${selectCart[0].id}
-    `,[userId]
-  );
-  return updateCart;
-  } else {
-    const error = new Error('Out of stock');
+    ) 
+    SELECT ${userId}, (SELECT po.id FROM product_options AS po
+    JOIN products AS p ON po.product_id = p.id
+    JOIN sizes AS s ON po.size_id = s.id
+    WHERE po.product_id=${productId} AND po.size_id=${sizeId}) 
+    WHERE NOT EXISTS
+    (
+      SELECT * FROM carts AS c 
+      WHERE c.user_id=${userId} AND c.product_option_id= 
+        (
+          SELECT po.id FROM product_options AS po
+          JOIN products AS p ON po.product_id = p.id
+          JOIN sizes AS s ON po.size_id = s.id
+          WHERE po.product_id=${productId} AND po.size_id=${sizeId}
+        )  
+    )
+  `)
+  
+  if (insertCart.affectedRows === 0) {
+    const error = new Error('FAILED');
     error.statusCode = 400;
     throw error;
   }
+  return insertCart;
 }
-
 
 const getCart = async (userId) => {
   const result = await appDataSource.query(`
@@ -65,6 +56,21 @@ const getCart = async (userId) => {
   return result;
 }
 
+const updateCart = async (userId, count, stock) => {
+  const result = await appDataSource.query(`
+    UPDATE carts AS c, product_options AS po
+    SET count=${count}
+    WHERE user_id=${userId} AND stock=${stock} AND ${count} <= ${stock}
+  `);
+  
+  if (result.affectedRows === 0) {
+    const error = new Error('FAILED');
+    error.statusCode = 400;
+    throw error;
+  }
+  return result;
+}
+
 const deleteCart = async (userId, productId, sizeId) => {
   const result = await appDataSource.query(`
     DELETE
@@ -82,5 +88,6 @@ const deleteCart = async (userId, productId, sizeId) => {
 module.exports = {
   createCart,
   getCart,
+  updateCart,
   deleteCart
 }
