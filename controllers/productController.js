@@ -11,14 +11,14 @@ const getProducts = catchAsync(async (req, res) => {
     res.status(200).json({ data : products });
 });
 
-const productDetails = catchAsync(async (req, res) => {
-    let productId = +req.params.productId;
-    const detail = await productService.productDetails(productId)
+const getProductDetails = catchAsync(async (req, res) => {
+    let productId = parseInt(req.params.productId);
+    const detail = await productService.getProductDetailsByProductId(productId)
 
     return res.status(200).json({ data : detail });
 })
 
 module.exports = {
     getProducts,
-    productDetails
+    getProductDetails
 }
