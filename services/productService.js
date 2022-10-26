@@ -4,7 +4,7 @@ const getProducts = async (offset, limit, gender) => {
     return await productDao.getProducts(offset, limit, gender);
 };
 
-const productDetails = async (productId) => {
+const getProductDetails = async (productId) => {
     let imageArray = [];
     let stockArray = [];
     
@@ -36,5 +36,5 @@ const productDetails = async (productId) => {
 
 module.exports = {
     getProducts,
-    productDetails
+    getProductDetails
 }
