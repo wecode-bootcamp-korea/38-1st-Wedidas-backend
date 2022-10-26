@@ -11,9 +11,8 @@ const getProductsByGender = async (sort, offset, limit, gender) => {
         }
         return sort ? sortSet[sort] : 'p.id'
       }
-
-     sort = orderBy(sort)
-    return await productDao.getProductsByGender(sort, offset, limit, gender);
+      
+    return await productDao.getProductsByGender(orderBy(sort), offset, limit, gender);
 };
 
 module.exports = {
