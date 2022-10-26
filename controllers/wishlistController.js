@@ -12,10 +12,10 @@ const createWishlist = catchAsync(async (req, res) => {
   }
 
   await wishlistService.createWishlist(userId, productId);
-  res.status(201).json({ message: 'Added to wishlist' });
+  res.status(201).json({ message: 'SUCCESS' });
 });
 
-const getWishlist = catchAsync(async (req, res) => {
+const getWishlistByUserId = catchAsync(async (req, res) => {
   const userId = req.user.id;
 
   if ( !userId ) {
@@ -24,7 +24,7 @@ const getWishlist = catchAsync(async (req, res) => {
     throw error;
   }
 
-  const wishlists = await wishlistService.getWishlist(userId);
+  const wishlists = await wishlistService.getWishlistByUserId(userId);
   res.status(200).json({ wishlists });
 });
 
@@ -48,6 +48,6 @@ const deleteWishlist = catchAsync (async (req, res) => {
 
 module.exports = {
   createWishlist,
-  getWishlist,
+  getWishlistByUserId,
   deleteWishlist
 }

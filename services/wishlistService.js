@@ -4,8 +4,8 @@ const createWishlist = async (userId, productId) => {
   return await wishlistDao.createWishlist(userId, productId);
 }
 
-const getWishlist = async (userId) => {
-  return await wishlistDao.getWishlist(userId);
+const getWishlistByUserId = async (userId) => {
+  return await wishlistDao.getWishlistByUserId(userId);
 }
 
 const deleteWishlist = async (userId, productId) => {
@@ -14,6 +14,6 @@ const deleteWishlist = async (userId, productId) => {
 
 module.exports = {
   createWishlist,
-  getWishlist,
+  getWishlistByUserId,
   deleteWishlist
 }

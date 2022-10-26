@@ -1,17 +1,29 @@
 const appDataSource = require('./dataSource');
 
 const createWishlist = async (userId, productId) => {
-  const result = await appDataSource.query(`
-    INSERT INTO wishlists (
+  const insertWishlist = await appDataSource.query(`
+    INSERT INTO wishlists 
+    (
       user_id,
       product_id
-    ) VALUES (?, ?)`,
-    [userId, productId]
+    ) 
+    SELECT ${userId}, ${productId}
+    WHERE NOT EXISTS
+    (
+      SELECT id FROM wishlists
+      WHERE user_id=${userId} AND product_id=${productId}
+    )`,
   );
-  return result;
+
+  if (insertWishlist.affectedRows === 0) {
+    const error =new Error('FAILED');
+    error.statusCode = 400;
+    throw error;
+  }
+  return insertWishlist;
 }
 
-const getWishlist = async (userId) => {
+const getWishlistByUserId = async (userId) => {
   const result = await appDataSource.query(`
     SELECT
       w.user_id AS userId,
@@ -40,6 +52,6 @@ const deleteWishlist = async (userId, productId) => {
 
 module.exports = {
   createWishlist,
-  getWishlist,
+  getWishlistByUserId,
   deleteWishlist
 }
