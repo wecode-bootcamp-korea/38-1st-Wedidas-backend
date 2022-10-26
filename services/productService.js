@@ -5,7 +5,7 @@ const getProducts = async (offset, limit, gender) => {
 };
 
 const getProductDetailsByProductId = async (productId) => {
-    return await productDao.productDetails(productId);
+    return await productDao.getProductDetailsByProductId(productId);
 }
 
 

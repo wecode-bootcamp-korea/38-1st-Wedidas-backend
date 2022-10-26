@@ -12,7 +12,7 @@ const getProducts = catchAsync(async (req, res) => {
 });
 
 const getProductDetails = catchAsync(async (req, res) => {
-    let productId = parseInt(req.params.productId);
+    const productId = parseInt(req.params.productId);
     const detail = await productService.getProductDetailsByProductId(productId)
 
     return res.status(200).json({ data : detail });

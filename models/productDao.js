@@ -22,7 +22,7 @@ const getProducts = async (offset, limit, gender) => {
   }
 };
 
-const productDetails = async (productId) => {
+const getProductDetailsByProductId = async (productId) => {
    try{
     return await database.query(`
       SELECT
@@ -32,26 +32,25 @@ const productDetails = async (productId) => {
       p.thumbnail_image_url AS thumbnailUrl,
       mc.name AS gender,
       sc.name AS cateogory,
-        JSON_ARRAYAGG(pi.image_url) AS images,
-        (	
-          SELECT
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
-                'id', po.id,
-                'footSize', s.foot_size,
-                'stock', po.stock
-            )
+      JSON_ARRAYAGG(pi.image_url) AS images,
+      (	
+        SELECT
+          JSON_ARRAYAGG(
+            JSON_OBJECT(
+              'id', po.id,
+              'footSize', s.foot_size,
+              'stock', po.stock
           )
-          FROM product_options AS po
-            INNER JOIN sizes AS s ON s.id = po.size_id
-            WHERE po.product_id = p.id
-        ) AS stocksize
+        )
+        FROM product_options AS po
+          INNER JOIN sizes AS s ON s.id = po.size_id
+          WHERE po.product_id = p.id
+      ) AS stocksize
       FROM products p
       LEFT JOIN product_images pi ON pi.product_id = p.id
       LEFT JOIN sub_categories sc ON sc.id = p.sub_category_id
       LEFT JOIN main_categories mc ON mc.id = sc.main_category_id
-      WHERE p.id = ?
-    ` , [productId]);
+      WHERE p.id = ?` , [productId]);
    }  
 
    catch (err) {
@@ -63,5 +62,5 @@ const productDetails = async (productId) => {
 
 module.exports = {
   getProducts,
-  productDetails
+  getProductDetailsByProductId
 };
