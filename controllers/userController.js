@@ -10,8 +10,8 @@ const signUp = catchAsync(async (req, res) => {
     throw error;
   }
 
-  const insertId = await userService.signUp(name, email, password, birthday, phoneNumber);
-  res.status(201).json({ insertId });
+  await userService.signUp(name, email, password, birthday, phoneNumber);
+  res.status(201).json({ message: 'SUCCESS' });
 });
 
 const signIn = async (req, res) => {
