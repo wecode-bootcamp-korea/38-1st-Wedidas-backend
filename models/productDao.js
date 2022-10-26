@@ -4,7 +4,6 @@ const getProductsByGender = async (sort, offset, limit, gender) => {
   try {
     return await database.query(`
        SELECT
-        DISTINCT
           p.id,
           p.name,
           p.price,
