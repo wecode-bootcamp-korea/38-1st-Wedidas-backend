@@ -2,26 +2,21 @@ const { UsingJoinColumnOnlyOnOneSideAllowedError } = require('typeorm');
 const appDataSource = require('./dataSource');
 
 const createCart = async (userId, productId, sizeId) => {
+  const productOptionId = `(SELECT po.id FROM product_options AS po
+    JOIN products AS p ON po.product_id = p.id
+    JOIN sizes AS s ON po.size_id = s.id
+    WHERE po.product_id=${productId} AND po.size_id=${sizeId})`
   const insertCart = await appDataSource.query(`
     INSERT INTO carts 
     (
       user_id,
       product_option_id
     ) 
-    SELECT ${userId}, (SELECT po.id FROM product_options AS po
-    JOIN products AS p ON po.product_id = p.id
-    JOIN sizes AS s ON po.size_id = s.id
-    WHERE po.product_id=${productId} AND po.size_id=${sizeId}) 
+    SELECT ${userId}, ${productOptionId}
     WHERE NOT EXISTS
     (
-      SELECT * FROM carts AS c 
-      WHERE c.user_id=${userId} AND c.product_option_id= 
-        (
-          SELECT po.id FROM product_options AS po
-          JOIN products AS p ON po.product_id = p.id
-          JOIN sizes AS s ON po.size_id = s.id
-          WHERE po.product_id=${productId} AND po.size_id=${sizeId}
-        )  
+      SELECT id FROM carts
+      WHERE user_id=${userId} AND product_option_id=${productOptionId} 
     )
   `)
 
