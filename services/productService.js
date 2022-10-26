@@ -1,24 +1,21 @@
 const productDao = require('../models/productDao');
 
 const getProducts = async (sort, size, offset, limit, gender) => {
-    offset = +offset;
-    limit = +limit;
 
-    if(sort === 'high'){
-        sort = 'p.price desc';
-      }else if(sort === 'low'){ 
-        sort = 'p.price';
-      }else if(sort === 'new'){
-        sort = 'p.id desc';
-      }else if(sort === 'old'){
-        sort = 'p.id';
-      }else if(sort === ''){
-        sort = 'p.id';
-      }
+    //  function orderBy(sort) {
+    //     const sortSet = {
+    //       old:  'p.id',
+    //       new:  'p.id desc',
+    //       high: 'p.price desc',
+    //       low:  'p.price'
+    //     }
+    //     return sort ? sortSet[sort] : 'p.id'
+    //   }
 
-    return await productDao.getProducts(sort, size, offset, limit, gender);
+    //  sort = orderBy(sort)
+    return await productDao.getProductsByGender(sort, size, offset, limit, gender);
 };
 
 module.exports = {
-    getProducts
+  getProducts
 }
