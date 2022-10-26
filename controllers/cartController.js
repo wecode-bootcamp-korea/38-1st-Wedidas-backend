@@ -5,45 +5,55 @@ const createCart = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { productId, sizeId } = req.body;
 
-  if ( !userId || !productId || !sizeId ) {
+  if ( !productId || !sizeId ) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
     throw error;
   }
+
   await cartService.createCart(userId, productId, sizeId);
   res.status(201).json({ message: 'SUCCESS' });
 });
 
-const getCart = catchAsync(async (req, res) => {
+const getCartByUserId = catchAsync(async (req, res) => {
   const userId = req.user.id;
 
-  if ( !userId ) {
+  const selectedCart  = await cartService.getCartByUserId(userId);
+  res.status(200).json({ selectedCart });
+})
+
+const updateCart = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const { cartId, count, stock } = req.query;
+
+  if ( !cartId || !count || !stock) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
     throw error;
   }
 
-  const selectCart = await cartService.getCart(userId);
-  res.status(200).json({ selectCart });
+  await cartService.updateCart(userId, cartId, count, stock);
+  res.status(200).json({ message: 'SUCCESS' });
 })
 
 const deleteCart = catchAsync(async (req, res) => {
   const userId = req.user.id;
-  const { productId, sizeId } = req.query;
+  const { cartId } = req.query;
 
-  if ( !userId || !productId || !sizeId) {
+  if ( !cartId) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
     throw error;
   }
 
-  await cartService.deleteCart(userId, productId, sizeId);
+  await cartService.deleteCart(userId, cartId);
   res.status(204).end();
+  // res.status(204).send();
 })
 
 module.exports = {
   createCart,
-  getCart,
+  getCartByUserId,
+  updateCart,
   deleteCart
 }
-
