@@ -1,8 +1,7 @@
 const database = require("./dataSource");
 
-const getProducts = async (sort, size, offset, limit, gender) => {
+const getProductsByGender = async (sort, offset, limit, gender) => {
   try {
-    
     return await database.query(`
        SELECT
         DISTINCT
@@ -28,5 +27,5 @@ const getProducts = async (sort, size, offset, limit, gender) => {
 };
 
 module.exports = {
-  getProducts,
+  getProductsByGender
 };

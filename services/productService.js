@@ -1,6 +1,6 @@
 const productDao = require('../models/productDao');
 
-const getProducts = async (sort, size, offset, limit, gender) => {
+const getProductsByGender = async (sort, offset, limit, gender) => {
 
      function orderBy(sort) {
         const sortSet = {
@@ -13,11 +13,9 @@ const getProducts = async (sort, size, offset, limit, gender) => {
       }
 
      sort = orderBy(sort)
-
-      console.log(sort)
-    return await productDao.getProducts(sort, size, offset, limit, gender);
+    return await productDao.getProductsByGender(sort, offset, limit, gender);
 };
 
 module.exports = {
-    getProducts
+  getProductsByGender
 }
