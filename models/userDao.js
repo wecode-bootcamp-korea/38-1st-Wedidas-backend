@@ -1,7 +1,8 @@
 const appDataSource = require('./dataSource');
 
 const createUser = async (name, email, password, birthday, phoneNumber) => {
-  const result = await appDataSource.query(`
+	try {
+		const result = await appDataSource.query(`
     INSERT INTO users (
       name,
       email,
@@ -11,7 +12,12 @@ const createUser = async (name, email, password, birthday, phoneNumber) => {
     ) VALUES (?, ?, ?, ?, ?)`,
     [name, email, password, birthday, phoneNumber]
   );
-  return result.insertId;
+  return result;
+	}	catch (err) {
+		const error = new Error('FAILED');
+		error.statusCode = 500;
+		throw error;
+	}
 }
 
 const getUserByEmail = async (email) => {
