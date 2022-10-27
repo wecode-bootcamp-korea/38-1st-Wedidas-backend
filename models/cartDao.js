@@ -12,7 +12,6 @@ const getProductOptionIdUsedInCart = async (productId, sizeId) => {
 }
 
 const createCart = async (userId, productOptionId) => {
-  console.log(userId)
   const insertCart = await appDataSource.query(`
     INSERT INTO carts(
       user_id,
@@ -31,7 +30,6 @@ const createCart = async (userId, productOptionId) => {
     error.statusCode = 400;
     throw error;
   }
-  console.log(insertCart)
   return insertCart;
 }
 
