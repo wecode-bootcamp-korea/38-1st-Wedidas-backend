@@ -61,7 +61,7 @@ const getProductDetailsByProductId = async (productId) => {
         SELECT
           JSON_ARRAYAGG(
             JSON_OBJECT(
-              'id', po.id,
+              'sizeId' , s.id,
               'footSize', s.foot_size,
               'stock', po.stock
           )
