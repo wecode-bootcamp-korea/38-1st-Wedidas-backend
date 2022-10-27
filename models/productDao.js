@@ -25,6 +25,18 @@ const getProducts = async (offset, limit, gender) => {
 };
 
 const getCategoryAllProducts = async (gender, category, offset, limit) => {
+
+  function searchByCategory(category) {
+    const categorySet = {
+      all:  ``,
+      originals:  `AND sc.name = 'originals'`,
+      slipper: `AND sc.name = 'slipper'`,
+      soccer:  `AND sc.name = 'soccer'`
+    }
+    
+    return category ? categorySet[category] : `mc.name ='men'`
+  }
+
   try{
   return await database.query(`
     SELECT
@@ -37,7 +49,7 @@ const getCategoryAllProducts = async (gender, category, offset, limit) => {
     FROM products AS p
     INNER JOIN sub_categories AS sc ON p.sub_category_id = sc.id
     INNER JOIN main_categories AS mc ON sc.main_category_id = mc.id
-    WHERE mc.name = '${gender}' ${category} LIMIT ${offset},${limit}`
+    WHERE mc.name = '${gender}' ${searchByCategory(category)} LIMIT ${offset},${limit}`
     );
   }
 catch (err) {
