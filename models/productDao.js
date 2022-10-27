@@ -1,17 +1,27 @@
 const database = require("./dataSource");
 
-const getProductsByGender = async (sort, offset, limit, gender) => {
+const getProductsByGender = async (sort, category, offset, limit, gender) => {
 
   function orderBy(sort) {
     const sortSet = {
       old:  'p.id',
       new:  'p.id desc',
       high: 'p.price desc',
-      low:  'p.price'
+      low:  'p.price' 
     }
     return sort ? sortSet[sort] : 'p.id'
   }
 
+  function categoryBy(category) {
+    const categorySet = {
+      originals:  `AND sc.name = 'originals'`,
+      slipper:  `AND sc.name = 'slipper'`,
+      soccer: `AND sc.name = 'soccer'`,
+      all : ``
+    }
+    return category ? categorySet[category] : ``
+  }
+  
   try {
     return await database.query(`
        SELECT
@@ -24,10 +34,10 @@ const getProductsByGender = async (sort, offset, limit, gender) => {
        FROM products AS p
        INNER JOIN sub_categories AS sc ON p.sub_category_id = sc.id
        INNER JOIN main_categories AS mc ON sc.main_category_id = mc.id
-       WHERE mc.name = ?
+       WHERE mc.name = '${gender}' ${categoryBy(category)}
        ORDER BY ${orderBy(sort)}
        LIMIT ?,?
-       `, [gender, offset, limit]
+       `, [offset, limit]
     );
   } catch (err) {
     const error = new Error(err.message);
