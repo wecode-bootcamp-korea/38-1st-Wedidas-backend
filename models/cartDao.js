@@ -1,29 +1,37 @@
 const appDataSource = require('./dataSource');
 
-const createCart = async (userId, productId, sizeId) => {
-  const productOptionId = `(SELECT po.id FROM product_options AS po
-    JOIN products AS p ON po.product_id = p.id
-    JOIN sizes AS s ON po.size_id = s.id
-    WHERE po.product_id=${productId} AND po.size_id=${sizeId})`
+const getProductOptionIdUsedInCart = async (productId, sizeId) => {
+  const [result] = await appDataSource.query(`
+    SELECT
+      id
+    FROM product_options
+    WHERE product_id = ? AND size_id = ?
+  `, [productId, sizeId]);
+
+  return result.id;
+}
+
+const createCart = async (userId, productOptionId) => {
+  console.log(userId)
   const insertCart = await appDataSource.query(`
-    INSERT INTO carts 
-    (
+    INSERT INTO carts(
       user_id,
       product_option_id
     ) 
     SELECT ${userId}, ${productOptionId}
-    WHERE NOT EXISTS
-    (
-      SELECT id FROM carts
-      WHERE user_id=${userId} AND product_option_id=${productOptionId} 
+    WHERE NOT EXISTS(
+      SELECT *
+      FROM carts AS c
+      WHERE c.user_id=${userId} AND c.product_option_id=${productOptionId} 
     )
   `)
 
-  if (insertCart.affectedRows) {
+  if (!insertCart.affectedRows) {
     const error = new Error('FAILED');
     error.statusCode = 400;
     throw error;
   }
+  console.log(insertCart)
   return insertCart;
 }
 
@@ -54,12 +62,12 @@ const getCartByUserId = async (userId) => {
 
 const updateCart = async (userId, cartId, quantity, stock) => {
   const result = await appDataSource.query(`
-    UPDATE carts AS c
-    SET quantity=${quantity}
-    WHERE c.id=${cartId} AND c.user_id=${userId} AND ${quantity} <= ${stock}
+    UPDATE carts
+    SET count=${count}
+    WHERE id=${cartId} AND user_id=${userId} AND ${count} <= ${stock}
   `);
-  
-  if (result.affectedRows) {
+
+  if (!result.affectedRows) {
     const error = new Error('FAILED');
     error.statusCode = 400;
     throw error;
@@ -78,6 +86,7 @@ const deleteCart = async (userId, cartId) => {
 }
 
 module.exports = {
+  getProductOptionIdUsedInCart,
   createCart,
   getCartByUserId,
   updateCart,
