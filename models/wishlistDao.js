@@ -1,6 +1,6 @@
 const appDataSource = require('./dataSource');
 
-const createWishlist = async (userId, productId) => {
+const createOrDeleteWishlistByValue = async (userId, productId) => {
   const insertWishlist = await appDataSource.query(`
     INSERT INTO wishlists(
       user_id,
@@ -54,7 +54,7 @@ const deleteWishlist = async (userId, productId) => {
 }
 
 module.exports = {
-  createWishlist,
+  createOrDeleteWishlistByValue,
   getWishlistByUserId,
   deleteWishlist
 }

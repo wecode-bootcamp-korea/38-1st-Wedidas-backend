@@ -1,7 +1,7 @@
 const wishlistDao = require('../models/wishlistDao');
 
-const createWishlist = async (userId, productId) => {
-  return await wishlistDao.createWishlist(userId, productId);
+const createOrDeleteWishlistByValue = async (userId, productId) => {
+  return await wishlistDao.createOrDeleteWishlistByValue(userId, productId);
 }
 
 const getWishlistByUserId = async (userId) => {
@@ -13,7 +13,7 @@ const deleteWishlist = async (userId, productId) => {
 }
 
 module.exports = {
-  createWishlist,
+  createOrDeleteWishlistByValue,
   getWishlistByUserId,
   deleteWishlist
 }
