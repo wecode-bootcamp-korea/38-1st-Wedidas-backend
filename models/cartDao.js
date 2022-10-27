@@ -25,7 +25,6 @@ const createCart = async (userId, productOptionId) => {
       WHERE c.user_id=${userId} AND c.product_option_id=${productOptionId} 
     )
   `)
-  console.log(insertCart)
 
   if (!insertCart.affectedRows) {
     const error = new Error('FAILED');

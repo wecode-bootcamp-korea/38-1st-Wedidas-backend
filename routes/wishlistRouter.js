@@ -4,8 +4,8 @@ const { loginRequired } = require('../utils/auth');
 
 const router = express.Router();
 
-router.post('', loginRequired, wishlistController.createWishlist);
-router.get('', loginRequired, wishlistController.getWishlist);
+router.post('', loginRequired, wishlistController.createOrDeleteWishlistByValue);
+router.get('', loginRequired, wishlistController.getWishlistByUserId);
 router.delete('', loginRequired, wishlistController.deleteWishlist);
 
 module.exports = router;
