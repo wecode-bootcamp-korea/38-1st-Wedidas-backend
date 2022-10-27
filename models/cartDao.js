@@ -63,8 +63,8 @@ const getCartByUserId = async (userId) => {
 const updateCart = async (userId, cartId, quantity, stock) => {
   const result = await appDataSource.query(`
     UPDATE carts
-    SET count=${count}
-    WHERE id=${cartId} AND user_id=${userId} AND ${count} <= ${stock}
+    SET quantity=${quantity}
+    WHERE id=${cartId} AND user_id=${userId} AND ${quantity} <= ${stock}
   `);
 
   if (!result.affectedRows) {
