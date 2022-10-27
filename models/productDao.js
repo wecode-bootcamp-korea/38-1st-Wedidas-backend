@@ -7,7 +7,7 @@ const getProductsByGender = async (sort, category, offset, limit, gender) => {
       old:  'p.id',
       new:  'p.id desc',
       high: 'p.price desc',
-      low:  'p.price'
+      low:  'p.price' 
     }
     return sort ? sortSet[sort] : 'p.id'
   }
