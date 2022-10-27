@@ -31,7 +31,7 @@ const getProductDetailsByProductId = async (productId) => {
       p.price,
       p.thumbnail_image_url AS thumbnailUrl,
       mc.name AS gender,
-      sc.name AS cateogory,
+      sc.name AS category,
       JSON_ARRAYAGG(pi.image_url) AS images,
       (	
         SELECT
